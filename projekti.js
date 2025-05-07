@@ -7,7 +7,7 @@ const clearButton = document.getElementById('clear-storage-button');
 const clearInfo = document.getElementById('clear-info');
 
 // Kuvan lataaminen
-form.addEventListener('submit', function (event) {
+form.addEventListener('submit', async function (event) {
     event.preventDefault(); // Estää sivun latautumisen uudelleen
 
     const fileInput = document.getElementById('image-input');
@@ -16,29 +16,45 @@ form.addEventListener('submit', function (event) {
     const name = imageNameInput.value.trim();
 
     if (file && name) {
-        const reader = new FileReader();
+        try {
+            // 1. Haetaan presigned URL Lambda-funktiolta
+            const response = await fetch("https://<api-endpoint>/presign", {
+                method: "GET"
+            });
 
-        reader.onload = function (e) {
-            const imageData = e.target.result;
+            const data = await response.json();
+            const { upload_url } = data;
 
-            // Haetaan nykyiset kuvat tai luodaan uusi objekti
-            let images = JSON.parse(localStorage.getItem('images')) || {};
-            images[name] = imageData;
-            localStorage.setItem('images', JSON.stringify(images));
+            // 2. Lähetetään kuva suoraan S3:een presigned URLin avulla
+            const uploadResponse = await fetch(upload_url, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "image/jpeg"
+                },
+                body: file
+            });
 
-            fileInput.value = '';
-            imageNameInput.value = '';
+            if (uploadResponse.ok) {
+                uploadInfo.textContent = `✅ Kuva "${name}" tallennettu onnistuneesti S3:een!`;
+                uploadInfo.style.color = "green";
 
-            uploadInfo.textContent = `✅ Kuva "${name}" tallennettu onnistuneesti!`;
-            uploadInfo.style.color = "green";
-        };
+                // Voit halutessasi tallentaa kuvan tiedot localStorageen (jos tarvitset myöhemmin)
+                let images = JSON.parse(localStorage.getItem('images')) || {};
+                images[name] = upload_url; // tallentaa S3 URLin
+                localStorage.setItem('images', JSON.stringify(images));
 
-        reader.onerror = function () {
-            uploadInfo.textContent = "❌ Kuvan lataaminen epäonnistui.";
+                // Tyhjennetään lomakekentät
+                fileInput.value = '';
+                imageNameInput.value = '';
+            } else {
+                uploadInfo.textContent = "❌ Kuvan lataaminen epäonnistui.";
+                uploadInfo.style.color = "red";
+            }
+        } catch (error) {
+            uploadInfo.textContent = "❌ Virhe kuvan latauksessa.";
             uploadInfo.style.color = "red";
-        };
-
-        reader.readAsDataURL(file); // TÄRKEÄ -> kuva muutetaan base64
+            console.error(error);
+        }
     } else {
         uploadInfo.textContent = "❌ Täytä molemmat kentät ja valitse kuva.";
         uploadInfo.style.color = "red";
@@ -62,7 +78,7 @@ function searchImage() {
         resultTitle.textContent = `Löytyi kuva: "${query}"`;
 
         const resultImage = document.createElement('img');
-        resultImage.src = images[query];
+        resultImage.src = images[query];  // Käytetään S3 URLia
         resultImage.alt = query;
 
         searchResult.appendChild(resultTitle);
@@ -85,3 +101,4 @@ clearButton.addEventListener('click', function () {
         uploadInfo.innerHTML = '';
     }
 });
+
