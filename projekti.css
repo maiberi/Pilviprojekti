@@ -1,0 +1,143 @@
+/* Sinun alkuperäinen css + pieni lisäys */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #253647; /* kirkas sininen */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+}
+
+.upload-section, .gallery {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section h2, .gallery h2 {
+    margin-top: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input[type="file"] {
+    padding: 10px;
+}
+
+button {
+    padding: 10px;
+    background-color: #007BFF; /* kirkas sininen */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3; /* tummempi sininen hoverilla */
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px;
+}
+
+.gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    background-color: #253647;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+#search-result, #upload-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+#search-result img {
+    max-width: 100%;
+    display: block;
+    margin-top: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-section {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#upload-info {
+    color: green;
+    font-weight: bold;
+}
+
+.not-found {
+    color: red;
+    font-weight: bold;
+}
+/* Sama kuin aiemmin, lisätään nämä loppuun: */
+
+#clear-storage-button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #dc3545; /* punainen */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#clear-storage-button:hover {
+    background-color: #a71d2a; /* tummempi punainen hover */
+}
+
+#clear-info {
+    margin-top: 10px;
+    font-weight: bold;
+}
