@@ -18,7 +18,7 @@ form.addEventListener('submit', async function (event) {
     if (file && name) {
         try {
             // 1. Haetaan presigned URL Lambda-funktiolta
-            const response = await fetch("https://<api-endpoint>/presign", {
+            const response = await fetch("https://p1sbjlnewb.execute-api.us-east-1.amazonaws.com/default/pilviprojektilambda1/presign", {
                 method: "GET"
             });
 
