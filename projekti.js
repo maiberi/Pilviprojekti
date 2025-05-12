@@ -26,10 +26,11 @@ form.addEventListener('submit', async function (event) {
             const { upload_url } = data;
 
             // 2. Lähetetään kuva suoraan S3:een presigned URLin avulla
+            const fileType = file.type;
             const uploadResponse = await fetch(upload_url, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "image/jpeg"
+                    "Content-Type": fileType
                 },
                 body: file
             });
