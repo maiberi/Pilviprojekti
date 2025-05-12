@@ -23,7 +23,7 @@ form.addEventListener('submit', async function (event) {
             });
 
             const data = await response.json();
-            const { upload_url } = data;
+            const { upload_url, image_id } = data;
 
             // 2. Lähetetään kuva suoraan S3:een presigned URLin avulla
             const fileType = file.type;
