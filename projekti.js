@@ -117,6 +117,8 @@ async function searchImage() {
 
             if (Array.isArray(data) && data.length > 0) {
                 data.forEach(item => {
+
+                    console.log("Item URL:", item.url);
                     const resultTitle = document.createElement('p');
                     resultTitle.textContent = `Kuva: "${item.imageID}"`;
 
