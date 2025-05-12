@@ -62,14 +62,24 @@ if (uploadResponse.ok) {
         fileInput.value = '';
         imageNameInput.value = '';
         tagsInput.value = '';
-    } else {
+            } else {
         uploadInfo.textContent = "❌ Kuvan lataus onnistui, mutta metatietojen tallennus epäonnistui.";
         uploadInfo.style.color = "red";
+            }
+        } else {
+        uploadInfo.textContent = "❌ Kuvan lataaminen epäonnistui.";
+        uploadInfo.style.color = "red";
+        } 
+    } catch (error) {
+            uploadInfo.textContent = "❌ Virhe kuvan latauksessa.";
+            uploadInfo.style.color = "red";
+            console.error(error);
     }
 } else {
-    uploadInfo.textContent = "❌ Kuvan lataaminen epäonnistui.";
-    uploadInfo.style.color = "red";
-}
+        uploadInfo.textContent = "❌ Täytä kaikki kentät ja valitse kuva.";
+        uploadInfo.style.color = "red";
+    }
+});
 
 
 // Kuvan haku id:llä
