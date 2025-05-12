@@ -18,9 +18,11 @@ form.addEventListener('submit', async function (event) {
     if (file && name) {
         try {
             // 1. Haetaan presigned URL Lambda-funktiolta
-            const response = await fetch("https://ny71z404e8.execute-api.eu-north-1.amazonaws.com/SignedURL", {
+            
+            const response = await fetch(`https://ny71z404e8.execute-api.eu-north-1.amazonaws.com/SignedURL?imageID=${name}`, {
                 method: "GET"
             });
+
 
             const data = await response.json();
             const { upload_url, image_id } = data;
