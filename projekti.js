@@ -125,7 +125,7 @@ async function searchImage() {
                     const resultImage = document.createElement('img');
                     resultImage.src = item.url;  // URL for image preview
                     resultImage.alt = item.imageID;
-                    resultImage.style.maxWidth = '300px'; // Control image size
+                    resultImage.style.maxWidth = '600px'; // Control image size
 
                     const downloadButton = document.createElement('button');
                     downloadButton.textContent = 'Lataa kuva';
