@@ -41,7 +41,7 @@ if (uploadResponse.ok) {
     const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
     // Send metadata to Lambda
-    const metadataResponse = await fetch('https://YOUR_API_GATEWAY_ENDPOINT/upload-metadata', {
+    const metadataResponse = await fetch('https://ofx0bjwtoe.execute-api.eu-north-1.amazonaws.com/UploadMeta', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
