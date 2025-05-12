@@ -23,15 +23,21 @@
     </section>
 
     <section class="search-section">
-        <h2>Hae kuvasta</h2>
-        <form id="search-form">
-            <input type="text" id="search-input" placeholder="Syötä kuvan nimi" required>
-            <button type="submit">Hae</button>
-        </form>
-        <div id="search-result"></div>
+        <h2>Hae kuvaa</h2>
+            <form id="search-form">
+            <input type="radio" id="search-by-name" name="search-option" value="name" checked>
+            <label for="search-by-name">Nimi</label>
+            <input type="radio" id="search-by-tag" name="search-option" value="tag">
+            <label for="search-by-tag">Tagi</label>
+            <br>
+            <input type="text" id="search-input" placeholder="Syötä kuvan nimi tai tagi" required>
+                <button type="submit">Hae</button>
+            </form>
+      <div id="search-result"></div>
         <button id="clear-storage-button">Tyhjennä kaikki kuvat</button>
-        <div id="clear-info"></div>
-    </section>
+     <div id="clear-info"></div>
+</section>
+
 
     <footer>
         <p>&copy; 2025 Kuvapankki</p>
