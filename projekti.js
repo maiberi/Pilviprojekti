@@ -45,7 +45,7 @@ if (uploadResponse.ok) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            imageId: data.image_id,
+            imageId: image_id,
             tags: tags,
             url: upload_url.split('?')[0]  // Clean S3 URL
         })
