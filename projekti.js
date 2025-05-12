@@ -164,17 +164,5 @@ function downloadImage(url) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-}
-
-
-// Tyhjennä kaikki kuvat
-clearButton.addEventListener('click', function () {
-    if (confirm('Haluatko varmasti tyhjentää kaikki tallennetut kuvat?')) {
-        localStorage.removeItem('images');
-        clearInfo.textContent = '✅ Kaikki kuvat on poistettu!';
-        clearInfo.style.color = 'green';
-        searchResult.innerHTML = '';
-        uploadInfo.innerHTML = '';
-    }
 });
 
