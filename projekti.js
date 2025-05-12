@@ -35,32 +35,42 @@ form.addEventListener('submit', async function (event) {
                 body: file
             });
 
-            if (uploadResponse.ok) {
-                uploadInfo.textContent = `✅ Kuva "${name}" tallennettu onnistuneesti S3:een!`;
-                uploadInfo.style.color = "green";
+if (uploadResponse.ok) {
+    // Get the tags
+    const tagsInput = document.getElementById('image-tags');
+    const tags = tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
-                // Voit halutessasi tallentaa kuvan tiedot localStorageen (jos tarvitset myöhemmin)
-                let images = JSON.parse(localStorage.getItem('images')) || {};
-                images[name] = upload_url; // tallentaa S3 URLin
-                localStorage.setItem('images', JSON.stringify(images));
+    // Send metadata to Lambda
+    const metadataResponse = await fetch('https://YOUR_API_GATEWAY_ENDPOINT/upload-metadata', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            imageId: data.image_id,
+            tags: tags,
+            url: upload_url.split('?')[0]  // Clean S3 URL
+        })
+    });
 
-                // Tyhjennetään lomakekentät
-                fileInput.value = '';
-                imageNameInput.value = '';
-            } else {
-                uploadInfo.textContent = "❌ Kuvan lataaminen epäonnistui.";
-                uploadInfo.style.color = "red";
-            }
-        } catch (error) {
-            uploadInfo.textContent = "❌ Virhe kuvan latauksessa.";
-            uploadInfo.style.color = "red";
-            console.error(error);
-        }
+    if (metadataResponse.ok) {
+        uploadInfo.textContent = `✅ Kuva ja metatiedot tallennettu onnistuneesti!`;
+        uploadInfo.style.color = "green";
+
+        let images = JSON.parse(localStorage.getItem('images')) || {};
+        images[name] = upload_url;
+        localStorage.setItem('images', JSON.stringify(images));
+
+        fileInput.value = '';
+        imageNameInput.value = '';
+        tagsInput.value = '';
     } else {
-        uploadInfo.textContent = "❌ Täytä molemmat kentät ja valitse kuva.";
+        uploadInfo.textContent = "❌ Kuvan lataus onnistui, mutta metatietojen tallennus epäonnistui.";
         uploadInfo.style.color = "red";
     }
-});
+} else {
+    uploadInfo.textContent = "❌ Kuvan lataaminen epäonnistui.";
+    uploadInfo.style.color = "red";
+}
+
 
 // Kuvan haku id:llä
 searchForm.addEventListener('submit', function (event) {
