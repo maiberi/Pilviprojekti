@@ -82,35 +82,84 @@ if (uploadResponse.ok) {
 });
 
 
-// Kuvan haku id:llä
+// Kuvan haku id:llä tai tagilla
 searchForm.addEventListener('submit', function (event) {
     event.preventDefault();
     searchImage();
 });
 
-function searchImage() {
+async function searchImage() {
     const query = document.getElementById('search-input').value.trim();
-    const images = JSON.parse(localStorage.getItem('images')) || {};
+    const searchOption = document.querySelector('input[name="search-option"]:checked').value;
+    const apiUrl = 'https://ofx0bjwtoe.execute-api.eu-north-1.amazonaws.com/SearchByTags';  
 
-    searchResult.innerHTML = '';
+    searchResult.innerHTML = '';  // Clear previous search results
 
-    if (images[query]) {
-        const resultTitle = document.createElement('p');
-        resultTitle.textContent = `Löytyi kuva: "${query}"`;
+    if (query) {
+        try {
+            const searchParams = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            };
 
-        const resultImage = document.createElement('img');
-        resultImage.src = images[query];  // Käytetään S3 URLia
-        resultImage.alt = query;
+            // Add the correct query parameter based on search option
+            const url = searchOption === 'name' 
+                ? `${apiUrl}?name=${query}`
+                : `${apiUrl}?tag=${query}`;
 
-        searchResult.appendChild(resultTitle);
-        searchResult.appendChild(resultImage);
+            // Fetch search results
+            const response = await fetch(url, searchParams);
+            const data = await response.json();
+
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(item => {
+                    const resultTitle = document.createElement('p');
+                    resultTitle.textContent = `Kuva: "${item.imageID}"`;
+
+                    const resultImage = document.createElement('img');
+                    resultImage.src = item.url;  // URL for image preview
+                    resultImage.alt = item.imageID;
+                    resultImage.style.maxWidth = '300px'; // Control image size
+
+                    const downloadButton = document.createElement('button');
+                    downloadButton.textContent = 'Lataa kuva';
+                    downloadButton.addEventListener('click', () => downloadImage(item.url));
+
+                    searchResult.appendChild(resultTitle);
+                    searchResult.appendChild(resultImage);
+                    searchResult.appendChild(downloadButton);
+                });
+            } else {
+                const notFound = document.createElement('p');
+                notFound.textContent = '❗ Kuvaa ei löytynyt.';
+                notFound.style.color = "red";
+                searchResult.appendChild(notFound);
+            }
+        } catch (error) {
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent = `❗ Virhe hakutulosten hakemisessa: ${error.message}`;
+            errorMessage.style.color = 'red';
+            searchResult.appendChild(errorMessage);
+            console.error(error);
+        }
     } else {
-        const notFound = document.createElement('p');
-        notFound.textContent = '❗ Kuvaa ei löytynyt annetulla ID:llä.';
-        notFound.style.color = "red";
-        searchResult.appendChild(notFound);
+        const emptyMessage = document.createElement('p');
+        emptyMessage.textContent = '❗ Syötä hakukysely!';
+        emptyMessage.style.color = 'red';
+        searchResult.appendChild(emptyMessage);
     }
 }
+
+// Kuvan lataus
+function downloadImage(url) {
+    const a = document.createElement('a');
+    a.href = url;  // Image URL
+    a.download = '';  // Trigger download without specifying a filename
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 
 // Tyhjennä kaikki kuvat
 clearButton.addEventListener('click', function () {
