@@ -104,7 +104,7 @@ async function searchImage() {
 
             // Add the correct query parameter based on search option
             const url = searchOption === 'name' 
-                ? `${apiUrl}?name=${query}`
+                ? `${apiUrl}?imageID=${query}`
                 : `${apiUrl}?tag=${query}`;
 
             // Fetch search results
