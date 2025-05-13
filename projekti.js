@@ -123,9 +123,9 @@ async function searchImage() {
                     resultTitle.textContent = `Kuva: "${item.imageID}"`;
 
                     const resultImage = document.createElement('img');
-                    resultImage.src = item.url;  // URL for image preview
+                    resultImage.src = item.url;  
                     resultImage.alt = item.imageID;
-                    resultImage.style.maxWidth = '600px'; // Control image size
+                    resultImage.style.maxWidth = '600px'; 
 
                     const downloadButton = document.createElement('button');
                     downloadButton.textContent = 'Lataa kuva';
@@ -159,8 +159,8 @@ async function searchImage() {
 // Kuvan lataus
 function downloadImage(url) {
     const a = document.createElement('a');
-    a.href = url;  // Image URL
-    a.download = '';  // Trigger download without specifying a filename
+    a.href = url;  
+    a.download = ''; 
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
